@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>穿越火线 · 第一人称</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="view"></canvas>
+
+    <div class="crosshair" id="crosshair" hidden>
+      <i></i><i></i><i></i><i></i>
+    </div>
+    <div class="scope" id="scope" hidden></div>
+
+    <div class="hud" id="hud" hidden>
+      <div class="hud-left">
+        <div class="hp-wrap">
+          <span class="label">生命</span>
+          <div class="bar"><i id="hp-bar"></i></div>
+          <span id="hp">100</span>
+        </div>
+        <div class="weapon-tag" id="weapon-name">步枪</div>
+      </div>
+      <div class="hud-center">
+        <span class="wave-tag">波次 <b id="wave">1</b></span>
+        <span class="kill-tag">击杀 <b id="kills">0</b></span>
+      </div>
+      <div class="hud-right">
+        <div class="ammo" id="ammo">30 <small>/ 90</small></div>
+        <div class="hint">空格跳跃 · R 换弹 · 右键开镜 · 1/2/3 切枪</div>
+      </div>
+    </div>
+
+    <div class="damage" id="damage"></div>
+    <div class="muzzle-flash" id="muzzle-flash"></div>
+
+    <!-- 开场 -->
+    <div class="screen" id="screen-start">
+      <div class="panel">
+        <p class="brand">CROSSFIRE</p>
+        <h1>穿越火线</h1>
+        <p class="desc">第一人称战区 · 选择武器后进入战场</p>
+        <button type="button" class="btn" id="btn-armory">选择武器</button>
+      </div>
+    </div>
+
+    <!-- 武器库 -->
+    <div class="screen hidden" id="screen-armory">
+      <div class="armory">
+        <header class="armory-head">
+          <p class="brand">ARMORY</p>
+          <h2>选择你的武器</h2>
+          <p class="desc">点击卡片装备，确认后进入战场</p>
+        </header>
+
+        <div class="weapon-grid" id="weapon-grid">
+          <button type="button" class="weapon-card selected" data-weapon="rifle">
+            <div class="weapon-preview" aria-hidden="true">
+              <svg viewBox="0 0 200 80" class="svg-gun">
+                <rect x="28" y="34" width="110" height="16" rx="3" fill="#4a5564"/>
+                <rect x="8" y="38" width="28" height="8" rx="2" fill="#2a3340"/>
+                <rect x="70" y="22" width="36" height="14" rx="2" fill="#3a4554"/>
+                <rect x="100" y="50" width="14" height="22" rx="2" fill="#2a3340"/>
+                <rect x="118" y="36" width="55" height="10" rx="2" fill="#5a6574"/>
+                <circle cx="175" cy="41" r="4" fill="#ff6a1a"/>
+              </svg>
+            </div>
+            <h3>步枪</h3>
+            <p class="weapon-code">AK / M4 风格</p>
+            <ul>
+              <li>射速快 · 弹匣 30</li>
+              <li>伤害均衡 · 适合中近距</li>
+            </ul>
+          </button>
+
+          <button type="button" class="weapon-card" data-weapon="pistol">
+            <div class="weapon-preview" aria-hidden="true">
+              <svg viewBox="0 0 200 80" class="svg-gun">
+                <rect x="70" y="30" width="55" height="18" rx="3" fill="#4a5564"/>
+                <rect x="55" y="34" width="20" height="10" rx="2" fill="#2a3340"/>
+                <rect x="100" y="48" width="16" height="24" rx="2" fill="#2a3340"/>
+                <rect x="118" y="34" width="28" height="8" rx="2" fill="#5a6574"/>
+                <circle cx="150" cy="38" r="3" fill="#ff6a1a"/>
+              </svg>
+            </div>
+            <h3>手枪</h3>
+            <p class="weapon-code">USP / Glock 风格</p>
+            <ul>
+              <li>机动强 · 弹匣 12</li>
+              <li>换弹快 · 备用弹充足</li>
+            </ul>
+          </button>
+
+          <button type="button" class="weapon-card" data-weapon="sniper">
+            <div class="weapon-preview" aria-hidden="true">
+              <svg viewBox="0 0 200 80" class="svg-gun">
+                <rect x="20" y="36" width="130" height="12" rx="2" fill="#4a5564"/>
+                <rect x="55" y="22" width="48" height="14" rx="2" fill="#3a4554"/>
+                <rect x="68" y="18" width="22" height="8" rx="1" fill="#1a222c"/>
+                <rect x="95" y="48" width="12" height="20" rx="2" fill="#2a3340"/>
+                <rect x="140" y="38" width="40" height="8" rx="2" fill="#5a6574"/>
+                <circle cx="70" cy="22" r="5" fill="none" stroke="#ff9a4a" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3>狙击枪</h3>
+            <p class="weapon-code">AWM 风格</p>
+            <ul>
+              <li>高伤害 · 弹匣 5</li>
+              <li>右键开镜 · 远距离压制</li>
+            </ul>
+          </button>
+        </div>
+
+        <div class="armory-actions">
+          <button type="button" class="btn btn-ghost" id="btn-back">返回</button>
+          <button type="button" class="btn" id="btn-deploy">确认出击</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 结算 / 失败 -->
+    <div class="screen hidden" id="screen-end">
+      <div class="panel">
+        <p class="brand">MISSION</p>
+        <h1 id="end-title">任务失败</h1>
+        <p class="desc" id="end-msg"></p>
+        <div class="armory-actions">
+          <button type="button" class="btn btn-ghost" id="btn-rearm">更换武器</button>
+          <button type="button" class="btn" id="btn-retry">再次出击</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
